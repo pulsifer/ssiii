@@ -1,0 +1,282 @@
+
+
+#Background, instructions, procedures, and resources for the Semantic Sea Ice Interoperability Initiative
+
+# Introduction #
+
+_This document is intended to provide a detailed resource that documents the working conventions, tools, definitions, and reference materials being used in the SSIII project.  Materials from a number of previous documents will be aggregated here for convenience._
+
+
+# Background and Definitions #
+
+**ONTOLOGY**
+
+In philosophy, ontology refers to presuppositions about what constitutes reality, and may also focus on philosophical and cognitive questions related to how we conceptualize and categorize phenomena.  In the context of information science, ontology refers to an explicit (machine-readable) and formal representation of concepts and the relationships between concepts in a given domain.
+
+Guarino and Poli (1995) succinctly define ontology as:  'a formal conceptualization of a specific domain that attempts to capture and constrain a set of conceptualizations'
+
+Noy and McGuinness (2001) define an ontology as a:  'Formal explicit description of concepts in a domain of discourse'
+
+A fundamental rationale for using an ontology is to avoid the ambiguity and vagueness of natural language (Ciocoiu et al. 2001).  Thus, in an ontology the meaning associated with data are well-defined using markup that facilitates disambiguation and defines structure.
+
+The use of ontology contributes to a larger movement towards a 'Semantic Web' (Berners-Lee et al. 2001) that allows computers to process the meaning of data.  For example, a Semantic Web approach can ensure, in a given context, that the  term 'concentration' is referring to the number of molecules of a substance in a given volume rather than a person's level of attentiveness.  Moreover, an ontology can capture important connections between data resources such as parent-child, whole-part, or disjoint ('not equal to') relationships to name a few.  An ontology is based on computational logic and can be reasoned with by computer programs either to verify the consistency of that knowledge or to make implicit knowledge explicit (http://www.w3.org/2001/sw/wiki/OWL).
+
+The Semantic Web approach exposes, shares, and connects pieces of data through the use of unique identifiers and standardized protocols for describing data.  This 'linked data' approach is combined with knowledge models formalized in ontologies to develop sophisticated applications that can improve our ability to find, process, integrate, and analyze information resources.
+
+At a practical level, the Semantic Web is being built using a suite of [and increasingly mature and powerful technologies](specifications.md) [to  http://www.w3.org/2001/sw/](hyperlink.md).
+
+References:
+
+Berners-Lee, T., Hendler, J., & Lassila, O. (2001). The Semantic Web. Scientific American, 284(5), 34-44.
+
+Ciocoiu, M., Gruninger, M., & Nau, D. S. (2001). Ontologies for Integrating Engineering Applications. Journal of Computing and Information Science in Engineering, 1(1), 12-22.
+
+Guarino, N., & Poli, R. (1995). The Role of Formal Ontology in the Information Technology. International Journal of Human-Computer Studies, 43, 623-624.
+
+Noy, N. F., & McGuinness, D. L. (2001). Ontology Development 101: A Guide to Creating Your First Ontology. Available at http://protege.stanford.edu/publications/ontology_development/ontology101-noy- mcguinness.html
+
+# Working conventions #
+
+## High-level approach ##
+  1. develop concepts w/ COE (optional step, can do in protege directly) – use RDF are/is-a and hasProperties relationships – don’t do numerical restrictions here
+  1. Export to OWL, check in to google code
+  1. Open via URI in Protege
+  1. add xsd facets for things like numerical ranges, if known – as Manchester Owl Notation – use superclass for equivalence (necessary and sufficient)
+  1. run reasoner – pellet is quick – look for error messages – look for occurrences of equivalence to “nothing” – inspect for invalid/unwanted inferences – fix as needed
+  1. save as both OWL XML (.owl) and Manchester OWL (.omn)
+  1. when complete create PURL for new ontology – point to google code owl soure – replace local references with PURL
+  1. verify the PURL redirects to the source OWL
+
+## General ##
+
+### Naming conventions ###
+
+The following naming conventions are being used for ontologies created in the SSIII project.
+
+**Class:**  Concatenated words each starting with upper case.  E.g. PancakeIce
+
+**Property:**  Concatenated words, first word all lower case, subsequent words starting with upper case.  E.g.  hasSnowCover
+
+**Individual:**  Lower case separated by spaces.  E.g. trapped air bubbles
+
+## CMap ##
+
+### Folders ###
+
+**Please do your work in the RPI-TWC -> SSIII shared space where if something either really good (like winning the lottery) or bad (the proverbial getting run over by a bus) happens to you, your knowledge isn't lost to the project.** Saving cmaps on your own computer is frowned upon.  Instead, please start your own folder or folders under the IHMC Public Cmaps (3) -> Users -> RPI-TWC -> SSIII site.  Since you can save the site in your favorites you really only have to go through the major hassle of finding the site once.
+**Please remember to edit the folder description to let folks know what is in the folder.  For example, while I can guess what is in the "Workshop drafts" folder, I haven't a clue what the "Sketches" folder is about.**
+
+### Files ###
+
+**Try to pick good file names that will be understandable to the rest of the team not just yourself!** Please append version numbers to file names - v1, v2, v3, etc. works fine; but it is also fine to use the v0.x form for works in progress.
+**Please remember to edit the file description so that newbies like me have a clue what the file is really about.  Even good file names are not always sufficient!** If you've created a folder for stuff you are in the middle of working on and aren't ready to share yet, please save any results that you do want others to look at out to the main level.  It isn't fair to point people to the inside of a folder that has a description indicating that it is a private work space.
+
+
+## Protege ##
+
+
+# List of Tools #
+
+**Conceptualization/Ontology Development Tools (Imp. tools for SSIII)**
+
+[CMap](http://cmap.ihmc.us)
+
+[CMap Ontology Edition](http://www.ihmc.us/groups/coe/)
+
+[Protege](http://protege.stanford.edu/)
+
+**Serving and Working with Semantic Data: SPARQL endpoints/ RDF Triple Stores /Reasoners etc.**
+
+[Sesame:](http://www.openrdf.org/)  This is an opens source Java framework for storing and querying RDF data - in other words it is the middleware our programmer's could use to query an RDF store of data.  It supports several types of API's including both a JBDC-like API and a RESTful HTTP interface supporting SPARQL and SeRQL protocols.
+
+[4Store:](http://4store.org/) - A very easy to install (on a Mac) RDF data store with built in web interface for SPARQL queries and pretty easy-to-use data import tools.  Advertised as being very scalable, secure, fast, and efficient.  Configured to run on a cluster it advertises good performance on queries of databases of 15GT and web applications involving thousands of users.  Single node installations can only handle small databases.  Doesn't have good documentation and seems to want you to hire them (UK business hours @ L 750 /machine/yr) to configure a cluster.
+
+[Jena](http://jena.sourceforge.net/)
+
+["TDB  Jena including TDB is a common combination](http://openjena.org/TDB/)
+
+[Pellet](http://clarkparsia.com/pellet)
+
+[Virtuoso](http://virtuoso.openlinksw.com/)
+
+[Simile project](http://simile.mit.edu/)
+
+[RDFLib](http://www.rdflib.net/)
+
+**Sample Applications and Application Frameworks**
+
+[SPARQL endpoint joseki](http://www.joseki.org/Joseki)
+
+[Linking Open Government Data](http://logd.tw.rpi.edu)
+
+[PopSci Grid](http://logd.tw.rpi.edu/project/PopSciGrid/)
+
+[OntoWiki](http://ontowiki.net/Projects/OntoWiki)
+
+[Semantic Media Wiki](http://semantic-mediawiki.org/wiki/Semantic_MediaWiki)
+
+**Visualization**
+
+[Visualization Tool Kit](http://www.vtk.org/)
+
+[Processing](http://www.processing.org)
+
+**Related Research Projects**
+
+[CA Big](https://cabig.nci.nih.gov/)
+
+[Open Biological and Biomedical Ontologies](http://www.obofoundry.org/ro/)
+
+# Important Resources and Reference Documents #
+
+[Manchester OWL Syntax - CO-ODE](http://www.co-ode.org/resources/reference/manchester_syntax/)
+
+**[CMap Guidance](http://www.ihmc.us/sandbox/groups/coe/wiki/welcome/attachments/d2a1b/COEmanual06.pdf) "The Theory Underlying Concept Maps and How to Construct and Use Them": -- The definitive concept map reference paper.**
+
+[CMap Ontology Edition Manual](http://www.ihmc.us/sandbox/groups/coe/wiki/welcome/attachments/d2a1b/COEmanual06.pdf)  Includes a _style guide_ of sorts.
+
+Overview [Presentation](https://ipydata.basecamphq.com/projects/5358949/file/69605558/COE-KCAP.ppt) on using concept maps to make ontologies.
+:
+ SSIII CMaps at IHMC Public Cmaps (3)/Users/RPI-TWC/SSIII/
+
+[IAAI paper](http://www.ksl.stanford.edu/KSL_Abstracts/KSL-07-01.html) showing some benefits and evaluation of a semantically enabled science informatics effort "the Virtual Solar Terrestrial Observatory": Deborah McGuinness, Peter Fox, Luca Cinquini, Patrick West, Jose Garcia, James L. Benedict, and Don Middleton. The Virtual Solar-Terrestrial Observatory: A Deployed Semantic Web Application Case Study for Scientific Research. In the Proceedings of the Nineteenth Conference on Innovative Applications of Artificial Intelligence (IAAI-07). Vancouver, British Columbia, Canada, July 22-26, 2007.
+
+See also the [ESIP Semantic Web Cluster](http://wiki.esipfed.org/index.php/Semantic_Web)
+
+# Ontology Links In Use #
+
+Please use this section to record links to all of the external ontologies that we've agreed to use on this project.  Please annotate the list with the reason for use and if there are any parts we are not using (or are only using).
+
+[RDF Schema](http://www.w3.org/TR/rdf-schema/#ref-rdf-semantics)
+**Foundational element of semantic web**
+
+
+[Simple Knowledge Organization System (SKOS)](http://www.w3.org/2009/08/skos-reference/skos.html)
+**Useful for mapping taxonomies and hierarchical relations**
+
+[GCMD science keywords in an ontology](http://dataportal.ucar.edu/schemas/gcmd.owl)
+**We agreed to use this copy for terms in our dc:subject annotations**
+
+[SWEET (OWL)](http://sweet.jpl.nasa.gov/2.2/sweetAll.owl)
+**Has SeaIce (a type of substance) and a half dozen subclasses like _SeasonalIce_ and _FastIce_** Has extensive treatment of measurables (under "Quantity" -> "Property" -> "Measure" and "Spatial Measure"
+**Has concept of vertical profile** Treatment of time is probably incomplete, but it tries
+
+[Basic Formal Ontology (BFO) OWL](http://bfo.googlecode.com/svn/trunk/src/ontology/bfo2_all.ow)
+**Has concepts such as "material entity", "quantity", "temporal instant","temporal interval","site" and "object boundary"**
+
+
+
+## CF conventions ("XML":http://cf-pcmdi.llnl.gov/documents/cf-standard-names/standard-name-table/18/cf-standard-name-table.xml) ##
+**Not an ontology, but a controlled vocabulary with quite a few terms related to sea ice**
+
+
+## Semantics in other Groups/Networks/Systems ##
+
+This is a place for us to record initial groups we want to collaborate with and their current level of semantic activity. As this evolves we may want to move it to the external wiki for broader community input.
+
+For now, I have listed some known networks and which one of us is the lead in working with those networks. I would like you to each add to the list and make some notes on the current state of semantic activity in the groups you are associated with..
+
+## Arctic Spatial Data Infrastructure (ASDI) ##
+
+I understand Wenwen Li, working with Doug Nebert at USGS, has done some work in uniting geospatial and semantic approaches in the Arctic. I'm sure this has not penetrated into the overall development of the ASDI. To date, ASDI activity has been focussed on getting the various Arctic national mapping agencies to buy in and to define an initial set of base layers to share through OGC protocols.
+
+There will be a GeoNorth III meeting in Tromsø, Norway this summer that will be largely focussed on developing the ASDI. Peter P. and Mark are on the organizing committee. We will try and get some significant semantic discussion on the program. It is possible that some sort of ASDI semantic working group could be established. ASDI is very much in its infancy, but it has some enthusiasm and momentum we might be able to capitalize on.
+
+A semantically enabled prototype system can be accessed here:  http://eie.cos.gmu.edu/VASDI/
+
+## "Sustained Arctic Observing Network (SAON)":http://arcticobserving.org ##
+
+There is no SAON data system and SAON in general is evolving in fits and starts. There is an interested group of practitioners working with the Antarctic community to develop a polar profile. Chris is compiling an inventory of vocabularies used in the Arctic esp. in SAON.
+
+## "Polar Information Commons (PIC)":http;//polarcommons.org ##
+
+There has been no significant discussion of interoperability so far. The PIC badge does include some RDF.
+
+## CADIS/OPERA ##
+
+## ELOKA and other Local and Traditional Knowledge ##
+
+Includes "ELOKA":http://eloka-arctic.org and the "ArcticNet Inuit Knowledge and Geospatial Ontologies in Nunatsiavut project":http://www.arcticnet.ulaval.ca/research/summary.php?project_id=72
+
+## International Polar Year Data and Information Service ##
+
+## SAON International Polar Metadata Profile (need link to their website/wiki) ##
+
+## GEOSS (esp. the GCI and the Compusult GeoPortal) ##
+
+## "DataNet (esp. DC)":http://dataconservancy.org ##
+
+The Data Conservancy (DC) has semantics as part of its overall goal, but hasn't made a lot of progress yet.  One area of great interest is in a model of an observation since it is something that may be able to integrate across all of the discipline areas that the DC covers (currently earth sciences, astronomy, life sciences, and social sciences).  DC folks, notably Carl Lagoze, are working with the SONET project.  SJ should find out more about this at the upcoming DC meeting he is attending on the 27th this month.
+
+## NASA ESDSWG ##
+
+Peter Fox is the project liaison as he co-leads the ESDSWG technology infusion subgroup on the semantic web
+
+http://www.sciencedatasystems.org/infusion/Semantic%20Web%20Documents/Forms/AllItems.aspx and http://tiwg.wik.is/Semantic_Web
+
+## SONET ##
+
+https://sonet.ecoinformatics.org/
+Deborah McGuinness liaison.
+
+## ESIP Semantic Cluster ##
+
+http://wiki.esipfed.org/index.php/Semantic_Web
+Peter Fox  liaison
+
+## Integrated Ecosystems Assessments ##
+
+(ECO-OP; Peter Fox PI with WHOI - INTEROP) http://tw.rpi.edu/portal/ECO-OP
+
+## "WMO Information System":http://www.wmo.int/pages/prog/www/WIS/index_en.html ##
+
+## International Ice Charting Working Group (IICWG) ##
+
+## ICSU ad hoc Strategic Coordinating Committee for Information and Data (SCCID) ##
+Peter Fox liaison
+
+http://www.icsu.org/1_icsuinscience/DATA_SCCID_1.html
+
+## International Union for Geodesy and Geophysics (IUGG) Union Commission on Data and Information ##
+(UCDI)--Peter F.
+
+http://www.iugg-ucdi.org
+
+## SeaDataNet ##
+
+## "MMI":http://marinemetadata.org/ ##
+## GEOSS ##
+
+GEO "Task AR-09-01d: Ontology and Taxonomy Development":AR-09-01d: Ontology and Taxonomy Development
+
+"DIAS (data integration and analytical system)":http://babel.csis.u-tokyo.ac.jp/op/en/
+
+
+## Ontology Prefixes Used in SSIII Ontologies ##
+  * ssiii: http://purl.org/nsidc/ssiii/seaice#
+  * annotations: http://purl.org/nsidc/ssiii/annotations#
+  * wmo: http://purl.org/wmo/seaice#
+  * dc: http://purl.org/dc/elements/1.1/
+  * muo: http://purl.oclc.org/NET/muo/muo#
+  * owl: http://www.w3.org/2002/07/owl#
+  * xsd: http://www.w3.org/2001/XMLSchema#
+  * xml: http://www.w3.org/XML/1998/namespace
+  * rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  * rdfs: http://www.w3.org/2000/01/rdf-schema#
+
+For geospatial data objects, to support geospatial queries
+  * geo: http://www.opengis.net/ont/OGC-GeoSPARQL/1.0/
+  * geo-gml: http://www.opengis.net/def/dataType/OGC-GML/3.0/
+or
+  * geo-gml: http://www.opengis.net/def/dataType/OGC-GML/3.0/GMLLiteral
+
+### what about the following?  don't we need geometry types?: ###
+  * geoot: http://www.opengis.net/def/objectType/OGC-GeoSPARQL/1.0/
+  * geoft: http://www.opengis.net/def/featureType/OGC-GeoSPARQL/1.0/
+  * geogt: http://www.opengis.net/def/geometryType/OGC-GeoSPARQL/1.0/
+  * geop: http://www.opengis.net/def/property/OGC-GeoSPARQL/1.0/
+  * geof: http://www.opengis.net /def/queryLanguage/OGC-GeoSPARQL/1.0/function/
+  * geor: http://www.opengis.net /def/queryLanguage/OGC-GeoSPARQL/1.0/rule/
+  * geo-sf: http://www.opengis.net/def/dataType/OGC-SF/1.0/
+
+## Info on Geospatial Ontologies ##

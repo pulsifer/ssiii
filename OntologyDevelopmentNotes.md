@@ -1,0 +1,62 @@
+# Introduction #
+
+  * The WMO document used is the Version 1.0 Draft which clearly is not a final draft as it is full of editorial notes.  We will have to revisit these ontologies as the document is updated.
+
+## Seaice-form Ontology Notes ##
+
+  * The definitions under "Ice of land origin" are complex and inter-related.  Only where there was a clear non-overlapping distinction of a class hierarchy were sub-class relationships used.  Otherwise, all terms were just entered at the same level.
+    * For example, Iceberg Tongues held together by fast ice would consist not only of "Ice of land origin" but also "sea ice."  However, the WMO nomenclature puts Iceberg Tongues under "Ice of land origin" and so did I.
+    * On the other hand it was pretty clear from the definition that "Glacier Ice" includes glaciers and icebergs, so I did make "Glacier Ice" a superclass of those two items.
+    * Similarly, "Ice Island" really has two definitions depending on hemisphere; but at this point we have no need to separate the two classes and the WMO doesn't (yet) so I left it as a single class.
+    * In some cases, there isn't really a good definition of a term in the WMO documentation.  In these cases, see for example "Tabular Berg," and additional comment with a suggested definition was added to the ontology.
+
+## Seaice-development Ontology Notes ##
+
+  * The big issue here is whether to try to assign thicknesses to sea ice stages older than one year.   Neither the WMO nomenclature nor the egg code actually assign thicknesses to these types (beyond terms like "typically").  Should we?  It is a bit confusing since these "stages" are actually about ice age and while thickness is a good proxy for young ice, color and other attributes are better proxies for older ice.  Left these as they were at the end of the sprint for the moment.
+
+## Egg Ontology Notes ##
+
+  * We'd like this ontology to work for all the sea ice charts that are created any where in the world; but at this point have only added enough to represent charts created by the US National Ice Center and the Canadian Ice Service.
+  * Each egg code with its associated geometry (the pair being called a zone) will have a parent chart from which it came (i.e.,
+    * `<eggcode zone> is-modeled-by some map`
+    * with this we only really handle charts that are somehow on-line
+  * We limited the ice chart (i.e., subtype of sio:map) specific information to be that is common between all of the example charts in the JCOMM TR24 colour standard for ice charts.  They are:
+    * analysis center (used Prov-O prov:Organization)
+    * spatial domain
+      * Each analysis center only creates charts for a few regions, which are fixed and well defined.
+      * We agreed to define and place into a separate rdf file the geofeatures for the 5 or so types of charts that the Canadian Ice Service creates, that way they can be generally referenced from anywhere.
+    * valid date (We agreed to relate the overall contents of the chart to the prov:generatedAtTime and invalidatedAtTime terms)
+
+But there is other information on some charts that would be good to capture as well:
+  * source data (satellite sensor), and date of that source
+  * analyst: (use prov:wasGeneratedBy or DC:contributor)
+  * projection: (CIS charts have this)
+However on 2/8/2013 we decided to ignore these for a while.
+
+
+## SIGRID file ontology ##
+
+We discussed what provenance information needs to be added to the sigrid ontology - attached to each zone in the file
+  * filename `(prov:wasDerivedFrom <fileURL>)`
+
+We also need to capture that files provenance and that it is part of a larger data set
+  * <a fileURL> ESIPData:hasDataSet <overall datasetURL>
+  * <a fileURL> dc:isPartOf <overall datasetURL>
+  * <a fileURL> prov:wasGeneratedBy [prov:Activity](a.md)
+  * prov:generatedAtTime <a datetime>
+  * prov:invalidatedAtTime <a datetime>
+  * prov:wasAssociatedWith <Canadian Ice Service or whomever>
+
+Also associated the distribution file to an ESIP DataGranule as part of an ESIP DataSet with title, identifier (i.e., DOI), publisher, as well as to a DCAT Dataset with a LandingPage and a few other attributes.
+
+**Note**: A lot of these are actually redundant from the terms we used in the egg ontology.  The question is how can we make the SIGRID data granules inherit the data values from the ice charts in the egg ontology?  The answer is that we don't - you have to declare them for both.
+
+There is an awful lot of FGDC CGDSM metadata associated with each data file.  Ideally we would capture all of that and stick it in the triple store also - After looking at the metadata much of it is the same from chart to chart - so should actually be associated with the data set and just once, or with each of the chart regions (i.e., Great Lakes or Hudson Bay) in the RDF file.  Whether or not a separate RDF file for the data set should be manually created (or a set auto-generated from NSIDC catalog) is another issue.  These are left for a task in the future.
+
+While cleaning up the sigrid3 ontology in preparation for adding provenance information, I realized that there are a number of terms used in the sigrid3 file for the Form of ice which do not map to anything on the egg code, but which do use terms in the WMO sea ice nomenclature which are as yet not part of any ontology.  This implies that it may not be possible to completely re-create a compliant sea ice map from a sigrid3 file.  It also implies that we may need to create yet more WMO ontologies...  The urgency of these fixes depends on what we see in the data we have.
+
+Also, there are occasional ice terms in sigrid which are not in the WMO ontologies and which, of course, have no definition in the sigrid documentation either.  Fortunately, the meaning is pretty clear, but still... what to do with them.  Let's hope they don't actually show up in the data.
+
+## General Notes ##
+
+  * Inferencing can be tricky - for example, bergy bits and growlers actually are small chunks of "ice of land origin" that have size definitions that fit nicely into the "sea ice" floe size definitions.  And actually they are chunks of ice smaller than the smallest sea ice floe.  You'd think that you could simply reuse the hasFloeSize data property to associate their sizes; but if you do then they end up being inferred as "sea ice."  In other words, if you want to capture floe sizes for these types of ice, you would either have to define another kind of floe size hasLandIceFloeSize or accept that ice in this category might be sea ice...
